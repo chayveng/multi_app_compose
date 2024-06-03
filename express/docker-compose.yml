@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  express:
+    image: express_multi
+    build: .
+    container_name: express_single
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    command: ["npx", "nodemon", "index.js"]

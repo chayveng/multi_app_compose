@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_multi
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx_conf:/etc/nginx/conf.d
+      - ./nginx/html:/usr/share/nginx/html
+      - ./nginx/static:/usr/share/nginx/static
+    # restart: unless-stopped
+
+  fastapi:
+    image: fastapi_multi
+    build:
+      context: ./fastapi
+    container_name: fastapi_multi
+    ports:
+      - "8050:8000"
+    volumes:
+    - ./fastapi:/app
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    depends_on:
+      - nginx
+
+  express:
+    image: express_multi
+    build: 
+      context: ./express
+    container_name: express_multi
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./express:/usr/src/app
+    command: ["npx", "nodemon", "index.js"]
+    depends_on:
+      - nginx
+      - fastapi
+

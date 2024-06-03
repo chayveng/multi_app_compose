@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_single
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx_conf:/etc/nginx/conf.d
+      - ./html:/usr/share/nginx/html
+      - ./static:/usr/share/nginx/static
+    restart: unless-stopped
